@@ -1,6 +1,3 @@
-import java.util.LinkedList;
-import java.util.Random;
-
 public class Simulador {
 
     private static final double PROBABILIDAD_LLEGADA = 0.6;
@@ -15,7 +12,6 @@ public class Simulador {
     private static final int UMBRAL_ANUNCIO = 25;
     private static final int MINUTO_ACTIVACION_REGLAS_EXTENDIDAS = 20;
 
-    private final Random random = new Random();
     private final Fila fila;
     private int contadorPersonas = 0;
     private int personasAtendidas = 0;
@@ -48,16 +44,16 @@ public class Simulador {
     }
 
     private void procesarLlegadaSimple(int minuto) {
-        if (random.nextDouble() < PROBABILIDAD_LLEGADA) {
+        if (Math.random() < PROBABILIDAD_LLEGADA) {
             intentarIngreso(new Persona(++contadorPersonas, minuto, false));
         }
     }
 
     private void procesarLlegadaExtendida(int minuto) {
-        if (random.nextDouble() >= PROBABILIDAD_LLEGADA) {
+        if (Math.random() >= PROBABILIDAD_LLEGADA) {
             return;
         }
-        double tipo = random.nextDouble();
+        double tipo = Math.random();
         if (tipo < PROBABILIDAD_PREFERENTE) {
             ingresarPreferente(minuto);
         } else if (tipo < PROBABILIDAD_PREFERENTE + PROBABILIDAD_COLARSE) {
@@ -68,7 +64,7 @@ public class Simulador {
     }
 
     private void ingresarPreferente(int minuto) {
-        if (fila.estaLlena() && random.nextDouble() < PROBABILIDAD_DESISTIR_FILA_LLENA) {
+        if (fila.estaLlena() && Math.random() < PROBABILIDAD_DESISTIR_FILA_LLENA) {
             return;
         }
         Persona persona = new Persona(++contadorPersonas, minuto, true);
@@ -85,23 +81,23 @@ public class Simulador {
             intentarIngreso(new Persona(++contadorPersonas, minuto, false));
             return;
         }
-        if (fila.estaLlena() && random.nextDouble() < PROBABILIDAD_DESISTIR_FILA_LLENA) {
+        if (fila.estaLlena() && Math.random() < PROBABILIDAD_DESISTIR_FILA_LLENA) {
             return;
         }
         Persona persona = new Persona(++contadorPersonas, minuto, false);
-        int indiceConocido = fila.indiceAleatorio(random);
+        int indiceConocido = fila.indiceAleatorio();
         fila.agregarDespuesDe(persona, indiceConocido);
     }
 
     private void intentarIngreso(Persona persona) {
-        if (fila.estaLlena() && random.nextDouble() < PROBABILIDAD_DESISTIR_FILA_LLENA) {
+        if (fila.estaLlena() && Math.random() < PROBABILIDAD_DESISTIR_FILA_LLENA) {
             return;
         }
         fila.agregarAlFinal(persona);
     }
 
     private void procesarAperturaCaja() {
-        if (!fila.estaVacia() && random.nextDouble() < PROBABILIDAD_APERTURA_CAJA) {
+        if (!fila.estaVacia() && Math.random() < PROBABILIDAD_APERTURA_CAJA) {
             fila.atenderFrente();
             personasAtendidas++;
         }
@@ -111,15 +107,12 @@ public class Simulador {
         if (minuto % INTERVALO_CHEQUEO_ABANDONO != 0) {
             return;
         }
-        LinkedList<Persona> aRemover = new LinkedList<>();
-        for (Persona persona : fila.getPersonas()) {
+        for (int i = fila.tamano() - 1; i >= 0; i--) {
+            Persona persona = fila.obtener(i);
             if (persona.tiempoEspera(minuto) > TIEMPO_MAXIMO_ESPERA
-                    && random.nextDouble() < PROBABILIDAD_ABANDONO) {
-                aRemover.add(persona);
+                    && Math.random() < PROBABILIDAD_ABANDONO) {
+                fila.removerEnIndice(i);
             }
-        }
-        for (Persona persona : aRemover) {
-            fila.removerPersona(persona);
         }
     }
 
