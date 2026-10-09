@@ -32,3 +32,7 @@ Porque los nodos ya no les pertenecen: ahora forman parte del resultado. Si `a` 
 - Se rompe la idea de que cada lista es dueña de sus nodos.
 
 Dejar `a.cabeza = null` y `b.cabeza = null` deja claro que los nodos se han transferido al resultado.
+
+## Punto de partida
+
+Se parte de `Nodo` y `ListaEnlazada` del ejemplo [Nodo dummy](https://github.com/mmasias/eda1/tree/main/src/secuencias/listas/nodoDummy) (campo `dato`, métodos `imprimirLista`, `insertarEnPosicion`, `eliminarPorValor` y sus versiones sin dummy). Solo se elimina la línea `package` para compilar en esta carpeta, y se añaden `eliminarRepetidos()`, `eliminarRepetidosSinDummy()` y `fusionar(a, b)`.

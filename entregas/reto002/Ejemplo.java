@@ -1,9 +1,9 @@
-public class Ejemplo {
+class Ejemplo {
 
     static ListaEnlazada crear(int[] valores) {
         ListaEnlazada lista = new ListaEnlazada();
         for (int i = 0; i < valores.length; i++) {
-            lista.agregar(valores[i]);
+            lista.insertarEnPosicion(i, valores[i]);
         }
         return lista;
     }
@@ -22,12 +22,15 @@ public class Ejemplo {
         for (int i = 0; i < casos.length; i++) {
             ListaEnlazada conDummy = crear(casos[i]);
             ListaEnlazada sinDummy = crear(casos[i]);
-            String entrada = conDummy.toString();
+            System.out.print("Entrada:   ");
+            conDummy.imprimirLista();
             conDummy.eliminarRepetidos();
             sinDummy.eliminarRepetidosSinDummy();
-            System.out.println("Entrada: " + entrada);
-            System.out.println("  Con dummy: " + conDummy);
-            System.out.println("  Sin dummy: " + sinDummy);
+            System.out.print("Con dummy: ");
+            conDummy.imprimirLista();
+            System.out.print("Sin dummy: ");
+            sinDummy.imprimirLista();
+            System.out.println();
         }
 
         int[][][] pares = {
@@ -37,15 +40,22 @@ public class Ejemplo {
             {{1, 1}, {1}}
         };
 
-        System.out.println();
         System.out.println("=== Reto extendido: fusionar ===");
         for (int i = 0; i < pares.length; i++) {
             ListaEnlazada a = crear(pares[i][0]);
             ListaEnlazada b = crear(pares[i][1]);
-            System.out.println("a: " + a + "   b: " + b);
+            System.out.print("a:         ");
+            a.imprimirLista();
+            System.out.print("b:         ");
+            b.imprimirLista();
             ListaEnlazada resultado = ListaEnlazada.fusionar(a, b);
-            System.out.println("  Resultado: " + resultado);
-            System.out.println("  a despues: " + a + "   b despues: " + b);
+            System.out.print("Resultado: ");
+            resultado.imprimirLista();
+            System.out.print("a despues: ");
+            a.imprimirLista();
+            System.out.print("b despues: ");
+            b.imprimirLista();
+            System.out.println();
         }
     }
 }
